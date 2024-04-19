@@ -1,4 +1,4 @@
-APP_NAME=Laravel
+APP_NAME='Manajemen Koleksi Museum'
 APP_ENV=local
 APP_KEY=base64:JKyhAEDgVGT6/gomu6Q6GgiWGl9h3eOlyfehvOhoJKQ=
 APP_DEBUG=true
