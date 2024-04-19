@@ -24,8 +24,9 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->sidebarCollapsibleOnDesktop(true) /* sidebar bisa hide */
             ->id('admin')
-            ->path('admin')
+            ->path('admin') /* alamat path panel admin */
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -38,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                /* Widgets\FilamentInfoWidget::class, */ /* Menghilangkan widget info filamen di panel admin */
             ])
             ->middleware([
                 EncryptCookies::class,
