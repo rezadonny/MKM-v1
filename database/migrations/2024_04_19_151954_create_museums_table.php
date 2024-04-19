@@ -13,6 +13,28 @@ return new class extends Migration
     {
         Schema::create('museums', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('alamat');
+            $table->string('kota');
+            $table->string('provinsi')->nullable();
+            $table->string('kode_pos')->nullable();
+            $table->string('telepon')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+            $table->string('medsos_instagram')->nullable();
+            $table->string('medsos_twitter')->nullable();
+            $table->string('medsos_facebook')->nullable();
+            $table->string('medsos_tiktok')->nullable();
+            $table->string('googlemap')->nullable();
+            $table->string('tipe_koleksi')->nullable();
+            $table->string('tipe_pengelola')->nullable();
+            $table->string('tipe_area')->nullable();
+            $table->string('tipe_audience')->nullable();
+            $table->string('tipe_pameran')->nullable();
+            $table->string('foto_utama')->nullable();
+            $table->string('logo')->nullable();
+            $table->longText('keterangan')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
