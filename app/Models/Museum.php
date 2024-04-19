@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Museum extends Model
 {
@@ -33,4 +34,9 @@ class Museum extends Model
         'keterangan',
         'slug',
     ];
+
+    public function koleksis(): HasMany
+    {
+        return $this->hasMany(Koleksi::class);
+    }
 }

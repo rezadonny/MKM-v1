@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('koleksis', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('museum_id')->constrained('museums')->cascadeOnDelete();
+            $table->string('no_reg')->nullable();
+            $table->string('no_inv')->nullable();
+            $table->string('nama');
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('mutasis', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('koleksi_id')->constrained('koleksis')->cascadeOnDelete();
+            $table->string('jenis_mutasi');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
