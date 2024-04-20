@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('museums', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('alamat');
-            $table->string('kota');
+            $table->string('alamat')->nullable();
+            $table->string('kota')->nullable();
             $table->string('provinsi')->nullable();
             $table->string('kode_pos')->nullable();
             $table->string('telepon')->nullable();
@@ -34,7 +34,9 @@ return new class extends Migration
             $table->string('foto_utama')->nullable();
             $table->string('logo')->nullable();
             $table->longText('keterangan')->nullable();
-            $table->string('slug')->unique();
+            $table->string('tanggal_berdiri')->nullable();
+            $table->string('pengelola')->nullable();
+            $table->string('slug')->nullable();
             $table->timestamps();
         });
     }

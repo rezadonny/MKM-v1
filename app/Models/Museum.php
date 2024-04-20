@@ -32,6 +32,8 @@ class Museum extends Model
         'foto_utama',
         'logo',
         'keterangan',
+        'tanggal_berdiri',
+        'pengelola',
         'slug',
     ];
 
