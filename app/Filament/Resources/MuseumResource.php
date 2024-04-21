@@ -89,15 +89,17 @@ class MuseumResource extends Resource
                                     ->description('Silahkan masukan kontak museum.')
                                     ->schema([
                                         Forms\Components\TextInput::make('telepon')
-                                            ->label('Telepon \ Seluler')
+                                            ->label('Telepon / Seluler')
                                             ->tel()
                                             ->maxLength(255)
                                             ->default(null),
                                         Forms\Components\TextInput::make('email')
+                                            ->label('Email')
                                             ->email()
                                             ->maxLength(255)
                                             ->default(null),
                                         Forms\Components\TextInput::make('website')
+                                            ->label('Website')
                                             ->url()
                                             ->prefix('URL')
                                             ->maxLength(255)
@@ -292,110 +294,158 @@ class MuseumResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('#')
-                    ->rowIndex(),
+                Tables\Columns\TextColumn::make('id')
+                    ->label('No.')
+                    ->rowIndex()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama Museum')
+                    ->limit(40)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('alamat')
+                    ->label('Alamat')
                     ->searchable()
                     ->sortable()
                     ->limit(40)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('kota')
+                    ->label('Kab. / Kota')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('provinsi')
+                    ->label('Provinsi')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('kode_pos')
+                    ->label('Kode Pos')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('telepon')
+                    ->label('Telpon / Seluler')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Email')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('website')
+                    ->label('Website')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('medsos_instagram')
+                    ->label('Instagram')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('medsos_twitter')
+                    ->label('Twitter')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('medsos_facebook')
+                    ->label('Facebook')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('medsos_tiktok')
+                    ->label('Tiktok')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('googlemap')
+                    ->label('Google Map Link')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipe_koleksi')
+                    ->label('Tipe Koleksi')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipe_pengelola')
+                    ->label('Tipe Pengelola')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipe_area')
+                    ->label('Tipe Area')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipe_audience')
+                    ->label('Tipe Audience')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tipe_pameran')
+                    ->label('Tipe Pameran')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('foto_utama')
+                    ->label('Foto Utama')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('logo')
+                    ->label('Logo')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('keterangan')
+                    ->label('Keterangan')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
-                    ->limit(40)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tanggal_berdiri')
+                    ->label('Tanggal Berdiri')
                     ->searchable()
+                    ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('pengelola')
+                    ->label('Pengelola')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label('Tag')
+                    ->limit(40)
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Data Dibuat')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Data Diperbarui')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
