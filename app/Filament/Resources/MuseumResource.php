@@ -292,6 +292,8 @@ class MuseumResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('#')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),

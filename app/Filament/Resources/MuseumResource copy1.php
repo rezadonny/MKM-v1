@@ -203,6 +203,8 @@ class MuseumResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('index')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
