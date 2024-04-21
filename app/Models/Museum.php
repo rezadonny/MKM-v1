@@ -50,6 +50,10 @@ class Museum extends Model
             if ($model->isDirty('foto_utama') && ($model->getOriginal('foto_utama') !== null)) {
                 Storage::disk('public')->delete($model->getOriginal('foto_utama'));
             }
+
+            if ($model->isDirty('logo') && ($model->getOriginal('logo') !== null)) {
+                Storage::disk('public')->delete($model->getOriginal('logo'));
+            }
         });
     }
 }

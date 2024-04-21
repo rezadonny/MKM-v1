@@ -464,6 +464,10 @@ class MuseumResource extends Resource
                                 if ($value->foto_utama) {
                                     Storage::disk('public')->delete($value->foto_utama);
                                 }
+
+                                if ($value->logo) {
+                                    Storage::disk('public')->delete($value->logo);
+                                }
                             }
                         }),
                 ]),

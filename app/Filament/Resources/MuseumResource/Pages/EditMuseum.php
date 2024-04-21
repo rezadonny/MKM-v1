@@ -28,6 +28,10 @@ class EditMuseum extends EditRecord
                         if ($record->foto_utama) {
                             Storage::disk('public')->delete($record->foto_utama);
                         }
+
+                        if ($record->logo) {
+                            Storage::disk('public')->delete($record->logo);
+                        }
                     }
                 ),
         ];
