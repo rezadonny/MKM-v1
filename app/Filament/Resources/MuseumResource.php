@@ -269,6 +269,7 @@ class MuseumResource extends Resource
                                             ->native(false)
                                             ->displayFormat('d/m/Y')
                                             ->closeOnDateSelection()
+                                            ->maxDate(now())
                                             ->label('Tanggal Berdiri')
                                             ->default(null),
                                         Forms\Components\TextInput::make('pengelola')
