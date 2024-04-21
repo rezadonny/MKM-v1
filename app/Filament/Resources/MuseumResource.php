@@ -15,7 +15,9 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Section;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\MuseumResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MuseumResource\RelationManagers;
@@ -150,11 +152,30 @@ class MuseumResource extends Resource
                                             ->label('Foto')
                                             ->image()
                                             ->disk('public')
+                                            ->directory('museum-foto')
+                                            ->visibility('private')
+                                            ->imageEditor()
+                                            ->imageEditorAspectRatios([
+                                                null,
+                                                '16:9',
+                                                '4:3',
+                                                '1:1',
+                                            ])
+                                            ->openable()
                                             ->default(null),
                                         Forms\Components\FileUpload::make('logo')
                                             ->label('Logo')
                                             ->image()
                                             ->disk('public')
+                                            ->directory('museum-logo')
+                                            ->visibility('private')
+                                            ->imageEditor()
+                                            ->imageEditorAspectRatios([
+                                                null,
+                                                '16:9',
+                                                '4:3',
+                                                '1:1',
+                                            ])
                                             ->default(null),
                                     ])
                             ]),
@@ -238,7 +259,10 @@ class MuseumResource extends Resource
                                         Forms\Components\RichEditor::make('keterangan')
                                             ->label('Sejaran Singkat')
                                             ->columnSpanFull()
-                                            ->default(null),
+                                            ->default(null)
+                                            ->fileAttachmentsDisk('public')
+                                            ->fileAttachmentsDirectory('museum-ket')
+                                            ->fileAttachmentsVisibility('private'),
                                         Forms\Components\DatePicker::make('tanggal_berdiri')
                                             ->native(false)
                                             ->displayFormat('d/m/Y')
@@ -353,6 +377,14 @@ class MuseumResource extends Resource
                     ->sortable()
                     ->limit(40)
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('tanggal_berdiri')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('pengelola')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->sortable()
@@ -374,7 +406,14 @@ class MuseumResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make() /* untuk menghapus file upload dari storage pada bulkaction */
+                        ->after(function (Collection $record) {
+                            foreach ($record as $key => $value) {
+                                if ($value->foto_utama) {
+                                    Storage::disk('public')->delete($value->foto_utama);
+                                }
+                            }
+                        }),
                 ]),
             ]);
     }

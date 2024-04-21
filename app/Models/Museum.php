@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -40,5 +41,15 @@ class Museum extends Model
     public function koleksis(): HasMany
     {
         return $this->hasMany(Koleksi::class);
+    }
+
+    protected static function boot() /* untuk menghapus file upload dari storage */
+    {
+        parent::boot();
+        static::updating(function ($model) {
+            if ($model->isDirty('foto_utama') && ($model->getOriginal('foto_utama') !== null)) {
+                Storage::disk('public')->delete($model->getOriginal('foto_utama'));
+            }
+        });
     }
 }
