@@ -25,13 +25,18 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->sidebarCollapsibleOnDesktop(true) /* sidebar bisa hide */
-            ->id('admin')
-            ->path('admin') /* alamat path panel admin */
+            /*             ->id('admin')
+            ->path('admin') */ /* alamat path panel admin */
+
+            ->id('dashboard')
+            ->path('dashboard') /* alamat path panel admin */
+
             ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->favicon(url: 'images/favicon-mkm.png')
+            ->darkMode(true)
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
