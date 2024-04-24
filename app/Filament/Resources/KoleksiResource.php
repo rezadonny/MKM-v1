@@ -4,13 +4,15 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Museum;
+
 use App\Models\Koleksi;
+use Filament\Forms\Get;
 
 use Filament\Forms\Set;
-use Illuminate\Support\Str;
-
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\KoleksiResource\Pages;
@@ -29,10 +31,50 @@ class KoleksiResource extends Resource
             ->schema([
                 Forms\Components\Select::make('museum_id')
                     ->relationship('museum', 'nama')
-                    ->required(),
+                    ->required()
+
+                    ->editOptionForm([
+                        Forms\Components\TextInput::make('nama')
+                            ->required(),
+                        Forms\Components\TextInput::make('email')
+                            ->required()
+                            ->email(),
+                    ])
+
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nama')
+                            ->label('Nama Museum')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpanFull()
+                            ->live(onBlur: true) /* form slug akan terisi apabila disorot */
+
+                            /* ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))), */ /* untuk langsung mengisi form slug tapi berubah jika nama diedit */
+
+                            ->afterStateUpdated(function (Get $get, Set $set, ?string $operation, ?string $old, ?string $state, ?Museum $record) {
+                                if ($operation == 'edit') {
+                                    return;
+                                }
+                                if (($get('slug') ?? '') !== Str::slug($old)) {
+                                    return;
+                                }
+                                $set('slug', Str::slug($state));
+                            }),
+
+                        Forms\Components\TextInput::make('email')
+                            ->email(),
+                        Forms\Components\TextInput::make('slug')
+                            ->label('Tag')
+                            ->required()
+                            ->maxLength(255)
+                            ->default(null)
+                            /* ->unique(fn (?string $operation, ?Museum $record) => $operation == 'create') */
+                            ->disabled(fn (?string $operation, ?Museum $record) => $operation == 'edit'),
+                    ]),
+
                 Forms\Components\TextInput::make('no_reg')
                     ->maxLength(255)
-                    ->unique()
+                    /* ->unique() */
                     ->default(null),
                 Forms\Components\TextInput::make('no_inv')
                     ->maxLength(255)
@@ -40,13 +82,14 @@ class KoleksiResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->required()
                     ->maxLength(255)
-                    ->live(onBlur:true) /* form slug akan terisi apabila disorot */
+                    ->live(onBlur: true) /* form slug akan terisi apabila disorot */
                     ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))), /* untuk langsung mengisi form slug  */
                 Forms\Components\TextInput::make('slug')
-                    ->required()
+                    /* ->required() */
                     /* ->unique() */
-                    ->disabled() /* form input slug tidak bisa diisi manual */
-                    ->maxLength(255),
+                    ->disabled(fn (?string $operation, ?Koleksi $record) => $operation == 'edit') /* form input slug tidak bisa diisi manual */
+                    ->maxLength(255)
+                    ->default(null),
             ]);
     }
 

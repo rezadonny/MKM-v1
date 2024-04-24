@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin') */ /* alamat path panel admin */
 
             ->id('dashboard')
-            ->path('dashboard') /* alamat path panel admin */
+            ->path('dashboard') /* alamat path panel admin = http://localhost/dashboard */
 
             ->login()
             ->colors([
