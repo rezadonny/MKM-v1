@@ -32,6 +32,8 @@ class KoleksiResource extends Resource
                 Forms\Components\Select::make('museum_id')
                     ->relationship('museum', 'nama')
                     ->required()
+                    ->searchable()
+                    ->preload()
 
                     ->editOptionForm([
                         Forms\Components\TextInput::make('nama')

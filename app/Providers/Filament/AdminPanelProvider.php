@@ -28,26 +28,40 @@ class AdminPanelProvider extends PanelProvider
             /*             ->id('admin')
             ->path('admin') */ /* alamat path panel admin */
 
-            ->id('dashboard')
+            ->id('admin')
             ->path('dashboard') /* alamat path panel admin = http://localhost/dashboard */
 
             ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->favicon(url: 'images/favicon-mkm.png')
-            ->darkMode(true)
+            ->favicon(url: 'images/favicon-mkm.png') /* lokasi fav icon */
+            ->darkMode(true) /* untuk mengaktifkan pilihan dark mode */
 
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
+
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 /* Widgets\FilamentInfoWidget::class, */ /* Menghilangkan widget info filamen di panel admin */
             ])
+            ->brandName('Manajemen Koleksi Museum') /* untuk page title */
+            ->brandLogo(fn () => view('vendor.filament-panels.components.logos')) /* alamat path logo blade */
+            ->brandLogoHeight('1.25rem')
+
+            ->navigationGroups([
+                'Museum BKT',
+                'Museum lain',
+            ])
+
+            ->unsavedChangesAlerts()  /* peringatan jika akan meninggalkan halaman tertentu yg berubah inputnya */
+
+            /* ->databaseNotifications() */
+
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

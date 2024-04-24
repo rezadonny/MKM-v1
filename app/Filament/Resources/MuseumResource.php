@@ -11,10 +11,8 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
-
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Section;
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,6 +26,10 @@ class MuseumResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
+    protected static ?string $navigationGroup = 'Museum';
+
+    protected static ?int $navigationSort = 1;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -40,8 +42,6 @@ class MuseumResource extends Resource
                     ->columnSpanFull()
                     ->live(onBlur: true) /* form slug akan terisi apabila disorot */
 
-                    /* ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))), */ /* untuk langsung mengisi form slug tapi berubah jika nama diedit */
-
                     ->afterStateUpdated(function (Get $get, Set $set, ?string $operation, ?string $old, ?string $state, ?Museum $record) {
                         if ($operation == 'edit') {
                             return;
@@ -50,7 +50,21 @@ class MuseumResource extends Resource
                             return;
                         }
                         $set('slug', Str::slug($state));
-                    }),                                         /* ini solusi slug tidak ikut berubah jika nama di edit */
+                    }),
+
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\Placeholder::make('created_at')
+                            ->label('Data dibuat :')
+                            ->content(fn (Museum $record): ?string => $record->created_at?->diffForHumans()),
+
+                        Forms\Components\Placeholder::make('updated_at')
+                            ->label('Terakhir diperbarui :')
+                            ->content(fn (Museum $record): ?string => $record->updated_at?->diffForHumans()),
+                    ])
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->hidden(fn (?Museum $record) => $record === null),
 
                 Forms\Components\Tabs::make('Tabs')
                     ->tabs([
@@ -302,7 +316,7 @@ class MuseumResource extends Resource
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Nama Museum')
                     ->limit(40)
-                    ->searchable()
+                    ->searchable(isIndividual: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('alamat')
                     ->label('Alamat')
@@ -452,26 +466,50 @@ class MuseumResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                /* Untuk menampilkan pilihan filter tabel : record Delete */
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
+                    /* untuk menghapus file upload dari storage */
+                    ->after(
+                        function (Museum $record) {
+                            if ($record->foto_utama) {
+                                Storage::disk('public')->delete($record->foto_utama);
+                            }
+                            if ($record->logo) {
+                                Storage::disk('public')->delete($record->logo);
+                            }
+                        }
+                    ),
+
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make() /* untuk menghapus file upload dari storage pada bulkaction */
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        /* Untuk menghapus semua file upload record yang di ForceDeleteBulkAction */
                         ->after(function (Collection $record) {
                             foreach ($record as $key => $value) {
                                 if ($value->foto_utama) {
                                     Storage::disk('public')->delete($value->foto_utama);
                                 }
-
                                 if ($value->logo) {
                                     Storage::disk('public')->delete($value->logo);
                                 }
                             }
                         }),
                 ]),
+            ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
             ]);
     }
 
@@ -489,5 +527,11 @@ class MuseumResource extends Resource
             'create' => Pages\CreateMuseum::route('/create'),
             'edit' => Pages\EditMuseum::route('/{record}/edit'),
         ];
+    }
+
+    /* Untuk menampilkan input Cari pada navbar atas */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nama', 'email', 'kota'];
     }
 }
